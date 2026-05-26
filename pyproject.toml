@@ -5,11 +5,12 @@ description = "Math-first implementations of alternative neural network architec
 requires-python = ">=3.14"
 dependencies = ["numpy>=2.0"]
 
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 
-[tool.uv]
-dev-dependencies = [
-    "pytest>=8.0",
-    "pytest-cov>=5.0",
-]
+[dependency-groups]
+dev = ["pytest>=8.0", "pytest-cov>=5.0", "gradio>=5.0"]
