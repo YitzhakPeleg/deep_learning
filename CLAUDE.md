@@ -62,6 +62,28 @@ Notation is defined in `docs/intro.typ` (Notation Reference section) and must st
 
 Typst math uses `$...$` (inline) and `$ ... $` (block). It is **not** LaTeX — use `bold(X)`, `frac(a, b)`, `sum_(i=1)^N`, not `\mathbf`, `\frac`, `\sum`.
 
+## Python Code Style
+
+Apply these rules without being asked:
+
+- **Python 3.14**: use modern syntax throughout (no `from __future__ import annotations`)
+- **Type hints**: always, on every function signature and class attribute
+  - Union types: `X | Y`, never `Union[X, Y]`
+  - Optional: `X | None`, never `Optional[X]`
+  - Built-in generics: `list[int]`, `tuple[str, ...]`, not `List`, `Tuple`
+  - Use `typing.Literal` for constrained string params; prefer `StrEnum` when the same values appear in multiple places (e.g. data splits, modes)
+- **Docstrings**: NumPy format on ALL functions (private and public)
+- **Paths**: always `pathlib.Path`; accept `Path | str` at public boundaries, coerce inside
+- **Immutable module-level mappings**: use `types.MappingProxyType`
+- **No bare `except`**; catch specific exceptions
+
+## Workflow
+
+Before starting implementation of an approved plan:
+1. Create a GitHub issue summarising the plan
+2. Create a feature branch named after the issue number (e.g. `issue-7-mnist-loader`)
+3. Implement on that branch; open a PR when done
+
 ## Architecture Coverage
 
 Seven architectures across three phases, all applied to MNIST (784-dim input, 10 classes):
