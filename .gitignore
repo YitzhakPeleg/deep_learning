@@ -34,6 +34,9 @@ data/
 # Typst build artifacts
 *.pdf
 
+# Experiment outputs
+*.csv
+
 # IDE
 .vscode/settings.json
 .idea/
