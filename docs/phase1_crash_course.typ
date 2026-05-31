@@ -327,6 +327,47 @@ $ frac(diff, diff bold(Q)) ["softmax"(bold(Q) bold(K)^top / sqrt(d_k)) bold(V)] 
 
 This is non-trivial but computed automatically by any autodiff library. The point is that *nothing fundamentally different from standard backprop is happening* — the graph is just structured differently.
 
+== Vision Transformer (ViT) Variant
+
+So far we have treated the image as a sequence of *rows*. The original ViT
+paper (Dosovitskiy et al., 2020) instead divides the image into *square
+patches*. For a 28×28 image with patch size $p$:
+
+$ n = H / p = W / p, quad T = n^2 $
+
+Each patch is a $p times p$ block of pixels, flattened to a vector of
+dimension $p^2$:
+
+$ bold(x)_t in RR^(p^2), quad t = 1, dots, T $
+
+These patch vectors are then projected to the model dimension just like row
+tokens:
+
+$ bold(z)_t = bold(x)_t bold(W)_e, quad bold(W)_e in RR^(p^2 times d_"model") $
+
+#table(
+  columns: (auto, auto, auto, auto),
+  stroke: 0.5pt,
+  inset: 8pt,
+  align: left,
+  table.header([*Tokenization*], [*Patch size $p$*], [*Tokens $T$*], [*Token dim*]),
+  [Row], [—], [28], [28],
+  [Patch (ViT)], [4], [49], [16],
+  [Patch (ViT)], [7], [16], [49],
+)
+
+The rest of the architecture — positional encoding, CLS token, encoder
+blocks, classification head — is identical. The only difference is whether
+the sequence captures *horizontal structure* (row tokens) or *local spatial
+patches* (patch tokens).
+
+#insight[
+  Patch tokenization gives the model finer spatial resolution at the cost of
+  a longer sequence. For MNIST the difference in accuracy is small, but patch
+  tokens tend to produce cleaner attention maps because each token corresponds
+  to a compact spatial region rather than a full row.
+]
+
 == What to Observe
 
 #table(
@@ -336,10 +377,11 @@ This is non-trivial but computed automatically by any autodiff library. The poin
   align: left,
   table.header([*Experiment*], [*What you learn*]),
   [Remove positional encoding], [Does row order matter for MNIST? (Surprisingly little)],
-  [Visualize attention matrix], [Which rows attend to which — the core interpretability win],
+  [Visualize attention matrix], [Which rows/patches attend to which — the core interpretability win],
   [1 head vs 8 heads], [Diminishing returns on simple tasks],
   [Vary $d_"model"$: 32, 64, 128], [Transformers are overparameterized for MNIST],
-  [Row tokens vs 4×4 patch tokens (49 tokens)], [ViT-style: more tokens, finer spatial info],
+  [Row tokens vs patch_size=4 (49 tokens)], [ViT-style: more tokens, finer spatial info],
+  [patch_size=4 vs patch_size=7], [Token count vs receptive field trade-off],
 )
 
 #gotcha[
