@@ -212,7 +212,7 @@ The input weights $bold(W)_"in"$ are typically dense, with entries drawn uniform
 )
 
 #gotcha[
-  The spectral radius $rho$ and the input scaling $sigma_"in"$ interact. A strong input signal can push the reservoir into saturation (all neurons near $pm 1$), effectively killing the dynamics regardless of $rho$. If performance is poor, check whether the reservoir states are saturating by monitoring the distribution of $bold(x)(T)$ values — they should be spread across $(-1, 1)$, not clustered near the extremes.
+  The spectral radius $rho$ and the input scaling $sigma_"in"$ interact. A strong input signal can push the reservoir into saturation (all neurons near $plus.minus 1$), effectively killing the dynamics regardless of $rho$. If performance is poor, check whether the reservoir states are saturating by monitoring the distribution of $bold(x)(T)$ values — they should be spread across $(-1, 1)$, not clustered near the extremes.
 ]
 
 #gotcha[
