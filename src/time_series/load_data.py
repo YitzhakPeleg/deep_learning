@@ -7,7 +7,7 @@ are time steps.  Series of different lengths are right-padded with nulls.
 Reference: Makridakis, Spiliotis & Assimakopoulos (2020),
     "The M4 Competition: 100,000 time series and 61 forecasting methods."
 """
-
+# %%
 from enum import StrEnum
 from pathlib import Path
 
@@ -82,3 +82,11 @@ def load_info() -> pl.DataFrame:
     """
     df = pl.read_csv(_M4_DIR / "m4_info.csv")
     return df.rename({col: inflection.underscore(col) for col in df.columns})
+
+# %%
+if __name__ == "__main__":
+    df = load_data(Freq.WEEKLY, Split.TRAIN)
+    print(df.head())
+    info = load_info()
+    print(info.head())
+# %%
